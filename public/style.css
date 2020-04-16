@@ -102,6 +102,7 @@ table {
     color: black;
   }
 
-  .sub{
+  .notesRow{
     color: black;
+    display: none;
   }
