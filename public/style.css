@@ -93,3 +93,7 @@ table {
     background-color: #4CAF50;
     color: white;
   }
+
+  td .hide {
+      display: none;
+  }

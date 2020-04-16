@@ -9,6 +9,7 @@ let tasklist = document.getElementById('tasklist')
 
 
 submit.onclick = function() {  
+
     let todo = {
       title: inputTask.value,
       due_date: dueDate.value,
@@ -17,10 +18,14 @@ submit.onclick = function() {
       notes: notes.value,
       status : 'INCOMPLETE'
   }
+
+  if (inputTask.value != '') {
+    addNewTodoJson(todo).then(
+      loadTask()
+    )
+  }
   
-  addNewTodoJson(todo).then(
-    addNewRow(todo)
-  )
+  
 
   inputTask.value = ''
   priority.selectedIndex = 1
@@ -73,6 +78,10 @@ function setTommorowDate(){
 
 function addNewRow(t) {
 
+  let id = document.createElement('td')
+  id.textContent = t.id
+  //id.classList('hide')
+
   let title = document.createElement('td')
   title.textContent = t.title
 
@@ -90,6 +99,7 @@ function addNewRow(t) {
 
   let newRow = document.createElement('tr')
 
+  newRow.appendChild(id)
   newRow.appendChild(title)
   newRow.appendChild(due_date)
   newRow.appendChild(priority)
@@ -100,7 +110,45 @@ function addNewRow(t) {
 
 }
 
+
+function createTableHeader(){
+  let id = document.createElement('td')
+  id.textContent = 'ID'
+  //id.classList('hide')
+
+  let title = document.createElement('td')
+  title.textContent = 'Title'
+
+  let due_date = document.createElement('td')
+  due_date.textContent = 'Due Date'
+
+  let priority = document.createElement('td')
+  priority.textContent = 'Priority'
+
+  let desc = document.createElement('td')
+  desc.textContent = 'DESCRIPTION'
+
+  let status = document.createElement('td')
+  status.textContent = 'STATUS'
+
+  let newRow = document.createElement('tr')
+
+  newRow.appendChild(id)
+  newRow.appendChild(title)
+  newRow.appendChild(due_date)
+  newRow.appendChild(priority)
+  newRow.appendChild(desc)
+  newRow.appendChild(status)
+
+  tasklist.appendChild(newRow)
+}
+ 
+
 function loadTask(){
+
+  tasklist.innerHTML = ''
+
+  createTableHeader()
 
     getTodos().then(todos => {
         for( let todo of todos){
