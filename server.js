@@ -156,4 +156,6 @@ app.put('/todos/:id', (req, res) => {
 
 })
 
-app.listen('6500')
+
+const sererport= process.env.PORT || 6500
+app.listen(sererport)
