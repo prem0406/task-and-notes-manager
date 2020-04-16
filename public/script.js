@@ -147,7 +147,7 @@ function addNewRow(t) {
   let inputDate = document.createElement("input");
   inputDate.type = "date"
   inputDate.value = t.due_date
-  inputDate.readOnly = "true"
+  // inputDate.readOnly = "true"
   let due_date = document.createElement('td')
   due_date.appendChild(inputDate)
 
