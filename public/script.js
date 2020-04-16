@@ -95,12 +95,6 @@ async function addNewTodoJson(todo) {
 }
 
 async function updateNotes(id,title, desc,oldNotes, newNotes, select, date, checkBox) {
-  console.log('New Notes:', oldNotes)
-  console.log('New id:', id)
-  console.log('New id:', select)
-  console.log('New id:', title)
-  console.log('New id:', desc)
-  console.log('New id:', newNotes)
 
   let newStatus = ''
   if (checkBox || checkBox == 'true'){
@@ -125,6 +119,17 @@ async function updateNotes(id,title, desc,oldNotes, newNotes, select, date, chec
     })
   })
 
+  if (newNotes != ''){
+    const resp = await fetch('/todos/'+id+'/notes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({notes : newNotes})
+    })
+  }
+
+  loadTask()
   console.log('success...')
 }
 
@@ -134,9 +139,7 @@ function addNewRow(t) {
   id.textContent = t.id
   id.classList.add('hide')
   
-  let expand = document.createElement('td')
-  expand.textContent = 'Expand'
-  expand.classList.add('expand')
+
 
   let title = document.createElement('td')
   title.textContent = t.title
@@ -218,7 +221,6 @@ function addNewRow(t) {
   newRow.appendChild(priority)
   newRow.appendChild(desc)
   newRow.appendChild(status)
-  newRow.appendChild(expand)
   newRow.classList.add('mainRow')
 
   tasklist.appendChild(newRow)
@@ -234,10 +236,6 @@ function createTableHeader(){
   let id = document.createElement('td')
   id.textContent = 'ID'
   id.classList.add('hide')
-
-  let expand = document.createElement('td')
-  expand.textContent = 'Click'
-  // expand.classList.add('expand')
 
   let title = document.createElement('td')
   title.textContent = 'Title'
@@ -262,7 +260,6 @@ function createTableHeader(){
   newRow.appendChild(priority)
   newRow.appendChild(desc)
   newRow.appendChild(status)
-  newRow.appendChild(expand)
  
 
   tasklist.appendChild(newRow)
