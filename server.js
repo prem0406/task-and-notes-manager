@@ -130,7 +130,7 @@ app.post('/todos/:id/:notes', (req, res) => {
 })
 
 
-app.patch('/todos/:id', (req, res) => {
+app.put('/todos/:id', (req, res) => {
 
     if (req.body.id && req.body.id != req.params.id) {
         return res.status(400).send({error: 'ID in the body is matching ID in URL'})
@@ -150,6 +150,7 @@ app.patch('/todos/:id', (req, res) => {
     }
 
     updateTodos(req.body.id, todo)
+    console.log('IN Server.....')
 
     res.status(201).send({success: 'Task Updated'})
 

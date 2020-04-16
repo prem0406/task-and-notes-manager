@@ -9,6 +9,13 @@ let btn = document.querySelector('.btn');
 
 
 
+const PriorityEnum = {
+  "HIGH":0,
+  "MEDIUM":1, 
+  "LOW":2
+}
+Object.freeze(PriorityEnum)
+
 submit.onclick = function() {  
 
     let todo = {
@@ -28,7 +35,7 @@ submit.onclick = function() {
 
 
   inputTask.value = ''
-  priority.selectedIndex = 1
+  priority.selectedIndex = PriorityEnum.MEDIUM
   desc.value = ''
   notes.value = ''
   setTommorowDate()
@@ -87,16 +94,35 @@ async function addNewTodoJson(todo) {
   loadTask()
 }
 
-async function updateNotes(notes, id) {
-  console.log('New Notes:', notes)
+async function updateNotes(id,title, desc,oldNotes, newNotes, select, date, checkBox) {
+  console.log('New Notes:', oldNotes)
   console.log('New id:', id)
+  console.log('New id:', select)
+  console.log('New id:', title)
+  console.log('New id:', desc)
+  console.log('New id:', newNotes)
 
-  const resp = await fetch('/todos/'+id+'/notes', {
-    method: 'POST',
+  let newStatus = ''
+  if (checkBox || checkBox == 'true'){
+    newStatus = 'COMPLETE'
+  } else {
+    newStatus = 'INCOMPLETE'
+  }
+
+  const resp = await fetch('/todos/'+id+'/', {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({notes : notes})
+    body: JSON.stringify({
+      id: id,
+      title: title,
+      desc: desc,
+      due_date: date,
+      status: newStatus,
+      priority : select,
+      notes: oldNotes
+    })
   })
 
   console.log('success...')
@@ -107,21 +133,56 @@ function addNewRow(t) {
   let id = document.createElement('td')
   id.textContent = t.id
   id.classList.add('hide')
+  
+  let expand = document.createElement('td')
+  expand.textContent = 'Expand'
+  expand.classList.add('expand')
 
   let title = document.createElement('td')
   title.textContent = t.title
 
+  let inputDate = document.createElement("input");
+  inputDate.type = "date"
+  inputDate.value = t.due_date
+  inputDate.readOnly = "true"
   let due_date = document.createElement('td')
-  due_date.textContent = t.due_date
+  due_date.appendChild(inputDate)
+
+
+  var select = document.createElement("SELECT");
+
+  var opt1 = document.createElement('option');
+   opt1.appendChild( document.createTextNode('HIGH') );
+   opt1.value = 'HIGH';
+ 
+   var opt2 = document.createElement('option');
+   opt2.appendChild( document.createTextNode('MEDIUM') );
+   opt2.value = 'MEDIUM'; 
+ 
+   var opt3 = document.createElement('option');
+   opt3.appendChild( document.createTextNode('LOW') );
+   opt3.value = 'LOW';
+   
+   select.appendChild(opt1);
+   select.appendChild(opt2);
+   select.appendChild(opt3);
+   
+   select.selectedIndex = PriorityEnum[t.priority]
 
   let priority = document.createElement('td')
-  priority.textContent = t.priority
+  priority.appendChild(select)
+
 
   let desc = document.createElement('td')
   desc.textContent = t.desc
 
+  let checkBox = document.createElement("INPUT");
+  checkBox.type = "checkbox"
+  if(t.status == 'COMPLETE') {
+    checkBox.checked = true
+  }
   let status = document.createElement('td')
-  status.textContent = t.status
+  status.appendChild(checkBox)
 
   let newRow = document.createElement('tr')
   let notesRow = document.createElement('tr')
@@ -157,13 +218,14 @@ function addNewRow(t) {
   newRow.appendChild(priority)
   newRow.appendChild(desc)
   newRow.appendChild(status)
+  newRow.appendChild(expand)
   newRow.classList.add('mainRow')
 
   tasklist.appendChild(newRow)
   tasklist.appendChild(notesRow)
   tasklist.classList.add('mainTable')
 
-  btnUpdate.addEventListener('click', () => updateNotes(newNoteInput.value, t.id))
+  btnUpdate.addEventListener('click', () => updateNotes(t.id,t.title, t.desc, t.note, newNoteInput.value, select.value,inputDate.value, checkBox.checked))
 
 }
 
@@ -172,6 +234,10 @@ function createTableHeader(){
   let id = document.createElement('td')
   id.textContent = 'ID'
   id.classList.add('hide')
+
+  let expand = document.createElement('td')
+  expand.textContent = 'Click'
+  // expand.classList.add('expand')
 
   let title = document.createElement('td')
   title.textContent = 'Title'
@@ -196,6 +262,7 @@ function createTableHeader(){
   newRow.appendChild(priority)
   newRow.appendChild(desc)
   newRow.appendChild(status)
+  newRow.appendChild(expand)
  
 
   tasklist.appendChild(newRow)
