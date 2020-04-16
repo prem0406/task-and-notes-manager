@@ -20,21 +20,18 @@ submit.onclick = function() {
   }
 
   if (inputTask.value != '') {
-    addNewTodoJson(todo).then(
-      loadTask()
-    )
+    addNewTodoJson(todo)
+    loadTask()
+    
   }
-  
-  
+
 
   inputTask.value = ''
   priority.selectedIndex = 1
   desc.value = ''
   notes.value = ''
   setTommorowDate()
-
-
-    
+  
     
 }
 
@@ -54,6 +51,8 @@ async function addNewTodoJson(todo) {
     },
     body: JSON.stringify(todo)
   })
+
+  loadTask()
 }
 
 function setTommorowDate(){
@@ -80,7 +79,7 @@ function addNewRow(t) {
 
   let id = document.createElement('td')
   id.textContent = t.id
-  //id.classList('hide')
+  id.classList.add('hide')
 
   let title = document.createElement('td')
   title.textContent = t.title
@@ -98,6 +97,24 @@ function addNewRow(t) {
   status.textContent = t.status
 
   let newRow = document.createElement('tr')
+  let notesRow = document.createElement('tr')
+
+  let notes = document.createElement('td')
+  notes.colSpan = '3'
+  let newNotes = document.createElement('td')
+  newNotes.colSpan = '3'
+
+  notes.textContent = t.notes
+  
+  let newNoteInput = document.createElement('input')
+  newNoteInput.type = 'text'
+
+  newNotes.appendChild(newNoteInput)
+
+  notesRow.appendChild(notes)
+  notesRow.appendChild(newNotes)
+  notesRow.classList.add('notesRow')
+
 
   newRow.appendChild(id)
   newRow.appendChild(title)
@@ -105,8 +122,11 @@ function addNewRow(t) {
   newRow.appendChild(priority)
   newRow.appendChild(desc)
   newRow.appendChild(status)
+  newRow.classList.add('mainRow')
 
   tasklist.appendChild(newRow)
+  tasklist.appendChild(notesRow)
+  tasklist.classList.add('mainTable')
 
 }
 
@@ -114,7 +134,7 @@ function addNewRow(t) {
 function createTableHeader(){
   let id = document.createElement('td')
   id.textContent = 'ID'
-  //id.classList('hide')
+  id.classList.add('hide')
 
   let title = document.createElement('td')
   title.textContent = 'Title'
@@ -139,6 +159,7 @@ function createTableHeader(){
   newRow.appendChild(priority)
   newRow.appendChild(desc)
   newRow.appendChild(status)
+ 
 
   tasklist.appendChild(newRow)
 }
@@ -155,6 +176,8 @@ function loadTask(){
           addNewRow(todo)
         }
     })
+
+    console.log('inside loadtask')
     
     this.setTommorowDate()
 }

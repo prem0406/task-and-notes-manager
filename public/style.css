@@ -97,3 +97,11 @@ table {
   td .hide {
       display: none;
   }
+
+  .main{
+    color: black;
+  }
+
+  .sub{
+    color: black;
+  }
