@@ -94,7 +94,7 @@ table {
     color: white;
   }
 
-  td .hide {
+  td.hide {
       display: none;
   }
 

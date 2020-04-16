@@ -100,9 +100,9 @@ function addNewRow(t) {
   let notesRow = document.createElement('tr')
 
   let notes = document.createElement('td')
-  notes.colSpan = '3'
+  notes.colSpan = '2'
   let newNotes = document.createElement('td')
-  newNotes.colSpan = '3'
+  newNotes.colSpan = '2'
 
   notes.textContent = t.notes
   
@@ -111,8 +111,16 @@ function addNewRow(t) {
 
   newNotes.appendChild(newNoteInput)
 
+  let btnUpdate = document.createElement('button')
+  btnUpdate.innerHTML = 'UPDATE'
+  btnUpdate.classList.add('btn')
+
+  let tdBtn = document.createElement('td')
+  tdBtn.appendChild(btnUpdate)
+
   notesRow.appendChild(notes)
   notesRow.appendChild(newNotes)
+  notesRow.appendChild(tdBtn)
   notesRow.classList.add('notesRow')
 
 
