@@ -5,6 +5,7 @@ let priority = document.getElementById('priority')
 let desc = document.getElementById('desc')
 let notes = document.getElementById('notes')
 let tasklist = document.getElementById('tasklist')
+let btn = document.querySelector('.btn');
 
 
 
@@ -52,7 +53,7 @@ async function addNewTodoJson(todo) {
     body: JSON.stringify(todo)
   })
 
-  loadTask()
+  // loadTask()
 }
 
 function setTommorowDate(){
@@ -74,6 +75,32 @@ function setTommorowDate(){
   
 }
 
+async function addNewTodoJson(todo) {
+  const resp = await fetch('/todos', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(todo)
+  })
+
+  loadTask()
+}
+
+async function updateNotes(notes, id) {
+  console.log('New Notes:', notes)
+  console.log('New id:', id)
+
+  const resp = await fetch('/todos/'+id+'/notes', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({notes : notes})
+  })
+
+  console.log('success...')
+}
 
 function addNewRow(t) {
 
@@ -135,6 +162,8 @@ function addNewRow(t) {
   tasklist.appendChild(newRow)
   tasklist.appendChild(notesRow)
   tasklist.classList.add('mainTable')
+
+  btnUpdate.addEventListener('click', () => updateNotes(newNoteInput.value, t.id))
 
 }
 
